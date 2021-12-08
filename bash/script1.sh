@@ -3,8 +3,8 @@
 #Password generator with command-line parameters
 
 
-len=$1
-symb=$2
+len=10
+symb=N
 
 get_password () {
  
