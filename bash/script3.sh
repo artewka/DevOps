@@ -42,7 +42,7 @@ RUN="$(systemctl is-active nginx.service)"
       else
         echo "Try to start nginx...."
         nginx_restart
-        sleep 5
+        sleep 60
         nginx_check
      fi
 
