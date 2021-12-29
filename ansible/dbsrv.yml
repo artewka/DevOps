@@ -5,10 +5,10 @@
 
   tasks:
   - name: Add GPG key for maria_db
-    ansible.bultin.shell: apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+    shell: apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 
   - name: Add MDB repo
-    ansible.bultin.shell: add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu bionic main'
+    shell: add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu bionic main'
 
   - name: Install nginx web-server
     apt:
@@ -31,10 +31,10 @@
       state: latest
 
   - name: Get php version
-    ansible.bultin.shell: echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+    shell: echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
 
   - name: Create_symb_link for phpmyadm
-    ansible.bultin.shell: ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+    shell: ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
 
   - name: Enable services on boot
     service: name=nginx state=started enabled=yes
