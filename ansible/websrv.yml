@@ -1,0 +1,21 @@
+---
+- name: Install software to web-srv
+  hosts: web_servers
+  become: yes
+
+  tasks:
+  - name: Install nginx web-server
+    apt:
+      name: nginx
+      state: latest
+  
+  - name: Install php
+    apt:
+      name: php-fpm
+      state: latest
+  
+  - name: Get php version
+    shell: echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+
+  - name: Enable services on boot
+    service: name=nginx state=started enabled=yes
