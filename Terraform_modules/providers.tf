@@ -14,14 +14,14 @@ terraform {
 
 
 provider "aws" {
-   access_key = "AKIAZJUOCNDEGDCMFP37"
-   secret_key = "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"
+   access_key = ""
+   secret_key = ""
    region     = "eu-central-1"
 }
 
 
 provider "cloudflare" {
    email = "shadak1997@gmail.com"
-   api_key = "cce4a5bb0b1db178ca20808e43a3ef130dcd5"
+   api_key = ""
    version = "~> 3.0"
 }
