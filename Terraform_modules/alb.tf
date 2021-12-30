@@ -27,17 +27,24 @@ resource "aws_lb_target_group" "starget" {
 }
 
 
-resource "aws_lb_target_group_attachment" "public_srv" {
-  count            = length(module.vpc.public_subnet_ids)
+resource "aws_lb_target_group_attachment" "web_srv_1" {
+  count            = length(module.web[0].aws_instance_id)
   target_group_arn = aws_lb_target_group.ftarget.arn
-  target_id        = element(module.ec2.aws_public_instance_id[*],count.index)
+  target_id        = element(module.web[0].aws_instance_id,count.index)
   port             = 80
 }
 
-resource "aws_lb_target_group_attachment" "private_srv" {
-  count            = length(module.vpc.private_subnet_ids)
+resource "aws_lb_target_group_attachment" "web_srv_2" {
+  count            = length(module.web[1].aws_instance_id)
+  target_group_arn = aws_lb_target_group.ftarget.arn
+  target_id        = element(module.web[1].aws_instance_id,count.index)
+  port             = 80
+}
+
+resource "aws_lb_target_group_attachment" "db_server" {
+  count            = length(module.db[0].aws_instance_id)
   target_group_arn = aws_lb_target_group.starget.arn
-  target_id        = element(module.ec2.aws_private_instance_id[*],count.index)
+  target_id        = element(module.db[0].aws_instance_id,count.index)
   port             = 80
 }
 
