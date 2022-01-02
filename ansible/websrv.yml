@@ -4,18 +4,18 @@
   become: yes
 
   tasks:
-  - name: Install nginx web-server
+  - name: Install software
     apt:
-      name: nginx
       state: latest
-  
-  - name: Install php
-    apt:
-      name: php-fpm
-      state: latest
+      name:
+        - nginx
+        - php-fpm
   
   - name: Get php version
-    shell: echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+    copy:
+      dest: "/var/www/html/phpinfo.php"
+      content: |
+        "<?php phpinfo(); ?>
 
   - name: Enable services on boot
     service: name=nginx state=started enabled=yes
