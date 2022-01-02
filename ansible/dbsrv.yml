@@ -5,36 +5,36 @@
 
   tasks:
   - name: Add GPG key for maria_db
-    ansible.bultin.shell: apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+    apt-key:
+      keyserver: keyserver.ubuntu.com
+      id: 0xF1656F24C74CD1D8
 
   - name: Add MDB repo
-    ansible.bultin.shell: add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu bionic main'
-
-  - name: Install nginx web-server
-    apt:
-      name: nginx
-      state: latest
-
-  - name: Install php
-    apt:
-      name: php-fpm
-      state: latest
+    apt_repository:
+      repo: deb http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu bionic main
+      state: present
   
-  - name: Install mariadb-server
+  - name: Install software
     apt:
-      name: mariadb-server
       state: latest
-
-  - name: Install phpmyadmin
-    apt:
-      name: phpmyadmin
-      state: latest
+      name:
+        - nginx
+        - php-fpm
+        - mariadb-server
+        - phpmyadmin
 
   - name: Get php version
-    ansible.bultin.shell: echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+    copy:
+      dest: "/var/www/html/phpinfo.php"
+      content: |
+        "<?php phpinfo(); ?>
 
-  - name: Create_symb_link for phpmyadm
-    ansible.bultin.shell: ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
+  - name: Create symb link for phpmyadm
+    file:
+        src: /usr/share/phpmyadmin
+        dest: /var/www/html/phpmyadmin
+        state: link
+    
 
   - name: Enable services on boot
     service: name=nginx state=started enabled=yes
