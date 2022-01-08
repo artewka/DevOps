@@ -1,0 +1,8 @@
+---
+# handlers file for php
+# - name: "Check PHP"
+#   package_facts:
+#       manager: "auto"
+#       debug: 
+#           msg: "PHP already install"
+#       when: "'php' in ansible_facts.packages"
