@@ -4,8 +4,8 @@ db_servers
 
 
 [web_servers]
-web1 ansible_host=ip
-web2 ansible_host=ip
+web1 ansible_host=3.120.225.68
+web2 ansible_host=52.59.246.50
 
 [db_servers]
 db1 ansible_host=ip

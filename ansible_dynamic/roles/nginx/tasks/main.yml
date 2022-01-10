@@ -1,0 +1,25 @@
+---
+# tasks file for nginx
+  - name: Install software
+    apt:
+      state: latest
+      name:
+        - nginx
+    #notify: Check NGINX
+
+  - name: Enable services on boot
+    service: 
+      name: nginx 
+      state: started 
+      enabled: yes
+
+  # - name: Get nginx version
+  #   shell: nginx -v
+  #   register: nginx_version
+
+  - name: Generate index.html
+    template: 
+      src: ~/Desktop/education/ansible_dynamic/roles/nginx/templates/index.j2
+      dest: /var/www/html/index.html
+      mode: 0555
+    notify: Restart Nginx

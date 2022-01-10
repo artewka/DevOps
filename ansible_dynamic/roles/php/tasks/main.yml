@@ -1,0 +1,18 @@
+---
+# tasks file for php
+  - name: Install software
+    apt:
+      state: latest
+      name:
+        - php-fpm
+   # notify: Check PHP
+
+  - name: add php file to directory
+    copy:
+      dest: "/var/www/html/phpinfo.php"
+      content: |
+        "<?php phpinfo(); ?>
+
+  # - name: Get php version
+  #   shell: php -v
+  #   #register: php_version

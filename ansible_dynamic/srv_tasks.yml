@@ -1,0 +1,22 @@
+- name: Run hosts tasks
+  hosts: all
+  gather_facts: true
+  become: yes
+  tasks:
+    - name: web servers
+      include_role:
+        name: "{{ role }}"
+      with_items: "{{ roles }}"
+      loop_control:
+        loop_var: role
+      when: ('tag_Name_web_srv' in group_names)
+
+    - name: db servers
+      include_role:
+        name: "{{ role }}"
+      with_items: "{{ roles }}"
+      loop_control:
+        loop_var: role
+      when: ('tag_Name_db_srv' in group_names)
+
+

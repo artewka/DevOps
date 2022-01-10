@@ -1,0 +1,17 @@
+---
+# tasks file for mariadb
+  - name: Add GPG key for maria_db
+    apt-key:
+      keyserver: keyserver.ubuntu.com
+      id: 0xF1656F24C74CD1D8
+  
+  - name: Add MDB repo
+    apt_repository:
+      repo: deb http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu bionic main
+      state: present
+
+  - name: Install software
+    apt:
+      state: latest
+      name:
+        - mariadb-server

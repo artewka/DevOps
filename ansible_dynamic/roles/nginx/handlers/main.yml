@@ -1,0 +1,16 @@
+---
+#handlers file for nginx
+ #handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    # - name: "Check if NGINX is installed"
+    #   package_facts:
+    #     manager: "auto"
+
+    # - name: "Check NGINX"
+    #   debug:
+    #       msg: "NGINX already install"
+    #   when: "'nginx' in ansible_facts.packages"
