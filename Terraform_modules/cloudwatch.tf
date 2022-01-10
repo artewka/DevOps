@@ -6,7 +6,7 @@ resource "aws_cloudwatch_dashboard" "terraform" {
   "widgets": [
     {
       "type": "metric",
-      "x": 1,
+      "x": 0,
       "y": 0,
       "width": 24,
       "height": 12,

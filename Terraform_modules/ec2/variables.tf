@@ -3,33 +3,17 @@ variable "instance_type" {
     description = "ec2-instance type"
 }
 
-variable "instance_iam" {
+variable "iam_instance_profile" {
     default     = "EC2_SSM"
     description = "ec2-iam role"
 }
 
-variable "public_count" {
-    default = "2"
-    type = string
+
+variable "subnet_id" {
 }
 
-variable "private_count" {
-    default = "1"
-    type = string
+variable "security_group" {
 }
 
-variable "public_subnet_id" {
-}
-
-
-variable "private_subnet_id" {
-}
-
-variable "vpc_cidr_id" {
-}
-
-variable "public_security_group" {
-}
-
-variable "private_security_group" {
+variable "user_data" {
 }

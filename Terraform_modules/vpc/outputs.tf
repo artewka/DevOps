@@ -13,9 +13,13 @@ output "vpc_cidr_id" {
 }
 
 output "sg_public" {
-  value = aws_security_group.public_srv.id
+  value = aws_security_group.web_srv.id
 }
 
 output "sg_private" {
-  value = aws_security_group.private_srv.id
+  value = aws_security_group.db_srv.id
+}
+
+output "bastion" {
+  value = aws_security_group.bastion.id
 }

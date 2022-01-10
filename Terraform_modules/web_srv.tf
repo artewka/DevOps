@@ -1,25 +1,34 @@
-data "terraform_remote_state" "vpc" {
-  backend = "local"
-
-  config = {
-    path = "/home/artem.yakymchuk/Desktop/education/terraform/Terraform_modules/vpc/terraform.tfstate"
-  }
-}
 
 module "vpc" {
   source = "./vpc"
 }
 
- module "ec2" {
+ module "web" {
    source = "./ec2"
 
- vpc_cidr_id            = module.vpc.vpc_cidr_id 
- public_count           = 2
- private_count          = 1
- public_subnet_id       = element(module.vpc.public_subnet_ids[*],0)
- private_subnet_id      = element(module.vpc.private_subnet_ids[*],0)
- public_security_group  = [module.vpc.sg_public]
- private_security_group = [module.vpc.sg_private]
+    count                        = 2
+    subnet_id                    = element(module.vpc.private_subnet_ids[*],count.index)
+    security_group               = [module.vpc.sg_public]
+    user_data                    = file("~/Desktop/Terraform_modules/ec2/web_srv.sh")
  }
 
- 
+  module "db" {
+   source = "./ec2"
+
+    count                        = 1
+    subnet_id                    = element(module.vpc.private_subnet_ids[*],count.index)
+    security_group               = [module.vpc.sg_private]
+    user_data                    = file("~/Desktop/Terraform_modules/ec2/db_srv.sh")
+    
+ }
+
+   module "bastion" {
+   source = "./ec2"
+
+    count                        = 1
+    subnet_id                    = element(module.vpc.public_subnet_ids[*],count.index)
+    security_group               = [module.vpc.bastion]
+    user_data                    = false
+
+    
+ }

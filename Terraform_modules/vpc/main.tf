@@ -17,6 +17,27 @@ resource "aws_internet_gateway" "gwT" {
   }
 }
 
+resource "aws_eip" "eip" {
+  vpc = true
+
+  tags = {
+    Name = "${var.environment}-eip"
+  }
+}
+
+resource "aws_nat_gateway" "ngwT" {
+ 
+  allocation_id = aws_eip.eip.id
+  subnet_id     = aws_subnet.Private[0].id
+
+  tags = {
+    Name = "${var.environment}-nat_gw"
+  }
+
+  depends_on = [aws_internet_gateway.gwT, aws_eip.eip]
+}
+
+
 resource "aws_route_table" "route_public" {
   vpc_id = aws_vpc.Vpc_Ter.id
 
@@ -30,9 +51,22 @@ resource "aws_route_table" "route_public" {
   }
 }
 
+resource "aws_route_table" "route_private" {
+  vpc_id = aws_vpc.Vpc_Ter.id
+
+  route {
+    cidr_block = var.route_public_cidr_block
+    gateway_id = aws_nat_gateway.ngwT.id
+  }
+
+  tags = {
+    Name = "${var.environment}-private_route table"
+  }
+}
+
 
 resource "aws_subnet" "Public" {
-  count                   = var.public_count
+  count                   = length(var.public_cidr_block)
   vpc_id                  = aws_vpc.Vpc_Ter.id
   cidr_block              = element(var.public_cidr_block,count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
@@ -44,7 +78,7 @@ resource "aws_subnet" "Public" {
 }
 
 resource "aws_subnet" "Private" {
-  count                  = var.private_count
+  count                  = length(var.private_cidr_block)
   vpc_id                 = aws_vpc.Vpc_Ter.id
   cidr_block             = element(var.private_cidr_block,count.index)
   availability_zone      = data.aws_availability_zones.available.names[count.index]
@@ -60,15 +94,8 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.route_public.id
 }
 
-
-
-/*
-resource "aws_nat_gateway" "nat-get" {
-  subnet_id     = aws_subnet.Private1.id
-
-  tags = {
-    Name = "gw NAT"
-  }
-  depends_on = [aws_internet_gateway.gwT]
+resource "aws_route_table_association" "private" {
+  count          = length (aws_subnet.Private[*])
+  subnet_id      = element(aws_subnet.Private[*].id,count.index)
+  route_table_id = aws_route_table.route_private.id
 }
-*/

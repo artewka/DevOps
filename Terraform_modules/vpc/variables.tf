@@ -13,12 +13,8 @@ variable "route_public_cidr_block" {
 }
 
 variable "public_cidr_block" {
-    default = [
-        "10.0.100.0/24",
-        "10.0.200.0/24",
-        "10.0.101.0/24",
-        "10.0.201.0/24",
-    ]
+    type    = list(string)
+    default = ["10.0.100.0/24", "10.0.200.0/24"]
 }
 
 variable "availability_zone" {
@@ -30,12 +26,8 @@ variable "availability_zone" {
 }
 
 variable "private_cidr_block" {
-    default = [
-        "10.0.110.0/24",
-        "10.0.210.0/24",
-        "10.0.111.0/24",
-        "10.0.211.0/24",
-    ]
+    type    = list(string)
+    default = ["10.0.110.0/24","10.0.210.0/24"]
 }
 
 variable "public_count" {
