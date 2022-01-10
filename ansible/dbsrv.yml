@@ -1,0 +1,40 @@
+---
+- name: Install software to web-srv
+  hosts: db_servers
+  become: yes
+
+  tasks:
+  - name: Add GPG key for maria_db
+    apt-key:
+      keyserver: keyserver.ubuntu.com
+      id: 0xF1656F24C74CD1D8
+
+  - name: Add MDB repo
+    apt_repository:
+      repo: deb http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu bionic main
+      state: present
+  
+  - name: Install software
+    apt:
+      state: latest
+      name:
+        - nginx
+        - php-fpm
+        - mariadb-server
+        - phpmyadmin
+
+  - name: Get php version
+    copy:
+      dest: "/var/www/html/phpinfo.php"
+      content: |
+        "<?php phpinfo(); ?>
+
+  - name: Create symb link for phpmyadm
+    file:
+        src: /usr/share/phpmyadmin
+        dest: /var/www/html/phpmyadmin
+        state: link
+    
+
+  - name: Enable services on boot
+    service: name=nginx state=started enabled=yes
