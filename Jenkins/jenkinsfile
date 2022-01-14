@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('access_key')
+        AWS_SECRET_ACCESS_KEY = credentials('secret_key')
+    }
+    stages {
+        
+        stage('Clone_repo') {
+            steps {
+                git branch: 'Jenkins1', url: 'https://github.com/artewka/jenkins-test.git'
+                }
+        }
+        
+        stage('Terraform start') { 
+            steps {
+                dir('Terraform') {
+                    sh ('terraform init')
+                    echo 'Terraform action is --> ${choose}'
+                    sh ('terraform ${choose} --auto-approve') 
+                }
+            }
+         }
+         
+        stage('Ansible run') { 
+            steps {
+                dir('ansible_dynamic'){
+                    ansiblePlaybook(
+                        vaultCredentialsId: 'vault',
+                        inventory: 'ansible_dynamic/inventory/aws_ec2.yaml',
+                        playbook: 'srv_tasks.yml',
+                        credentialsId: 'ssh_ansible',
+                        extras: '-c paramiko'
+                    )
+                }
+            }
+        }
+    }
+}
